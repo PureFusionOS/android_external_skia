@@ -301,7 +301,12 @@ SkCodec::Result SkJpegCodec::onGetPixels(const SkImageInfo& dstInfo,
         return fDecoderMgr->returnFailure("conversion_possible", kInvalidConversion);
     }
 
-    // Now, given valid output dimensions, we can start the decompress
+#ifdef DCT_IFAST_SUPPORTED
+    dinfo->dct_method = JDCT_IFAST;
+#else
+    dinfo->dct_method = JDCT_ISLOW;
+#endif
+// Now, given valid output dimensions, we can start the decompress
     if (!jpeg_start_decompress(dinfo)) {
         return fDecoderMgr->returnFailure("startDecompress", kInvalidInput);
     }
@@ -415,6 +420,12 @@ SkCodec::Result SkJpegCodec::onStartScanlineDecode(const SkImageInfo& dstInfo,
     if (!this->setOutputColorSpace(dstInfo)) {
         return kInvalidConversion;
     }
+
+#ifdef DCT_IFAST_SUPPORTED
+    (fDecoderMgr->dinfo())->dct_method = JDCT_IFAST;
+#else
+    (fDecoderMgr->dinfo())->dct_method = JDCT_ISLOW;
+#endif
 
     // Now, given valid output dimensions, we can start the decompress
     if (!jpeg_start_decompress(fDecoderMgr->dinfo())) {
@@ -638,7 +649,6 @@ SkCodec::Result SkJpegCodec::onGetYUV8Planes(const YUVSizeInfo& sizeInfo, void* 
 
     // Get a pointer to the decompress info since we will use it quite frequently
     jpeg_decompress_struct* dinfo = fDecoderMgr->dinfo();
-
     dinfo->raw_data_out = TRUE;
     if (!jpeg_start_decompress(dinfo)) {
         return fDecoderMgr->returnFailure("startDecompress", kInvalidInput);
