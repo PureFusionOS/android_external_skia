@@ -59,12 +59,9 @@ LOCAL_CFLAGS += \
 	-Wno-clobbered -Wno-error \
 	-fexceptions
 
-ifeq ($(strip $(TARGET_ARCH)),arm)
-  ifeq ($(ARCH_ARM_HAVE_NEON),true)
-    LOCAL_CFLAGS += -funsafe-math-optimizations
-  endif
+ifeq ($(ARCH_ARM_HAVE_NEON),true)
+  LOCAL_CFLAGS_arm += -funsafe-math-optimizations
 endif
-
 
 LOCAL_CPPFLAGS := \
 	-std=c++11 \
