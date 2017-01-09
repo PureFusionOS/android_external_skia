@@ -43,13 +43,12 @@ LOCAL_PATH:= $(call my-dir)
 ###############################################################################
 
 include $(CLEAR_VARS)
+LOCAL_CLANG_LTO := true
 LOCAL_FDO_SUPPORT := true
 # This should be the last -Oxxx specified in LOCAL_CFLAGS
 LOCAL_CFLAGS += -O3
 
 LOCAL_ARM_MODE := thumb
-# used for testing
-#LOCAL_CFLAGS += -g -O0
 
 LOCAL_CFLAGS += \
 	-fPIC \
@@ -833,6 +832,7 @@ include $(BUILD_STATIC_LIBRARY)
 ###############################################################################
 
 include $(CLEAR_VARS)
+LOCAL_CLANG_LTO := true
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_MODULE := libskia
 LOCAL_WHOLE_STATIC_LIBRARIES := libskia_static
