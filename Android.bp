@@ -852,5 +852,9 @@ cc_library {
         "libwebp-decode",
         "libwebp-encode",
     ],
+
+    lto: {
+        thin: true,
+    },
 }
 
